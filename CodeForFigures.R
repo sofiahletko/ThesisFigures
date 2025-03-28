@@ -1,6 +1,6 @@
 
 # generate a plot of the probability of getting a haircut
-
+# Figure 1 in paper
 ggplot(data.frame(x = seq(a, b, length.out = 100)), aes(x)) + 
   stat_function(fun = function(x) (prob_cut_at_t(x)),
                 color = "blue") +
@@ -11,7 +11,7 @@ ggplot(data.frame(x = seq(a, b, length.out = 100)), aes(x)) +
            x = coupon_time + 2, y = 0.03, 
            label = "Coupon Time", color = "red", angle = 0, hjust = 0)
 
-#ggsave(file.path(fig_filepath, "haircut_time_probability_with_coupon.jpeg"), dpi = 300)
+ggsave(file.path(fig_filepath, "haircut_time_probability_with_coupon.jpeg"), dpi = 300)
 
 
 
@@ -29,6 +29,7 @@ different_coupon_times$prob <- mapply(
 )
 
 # Plot
+# Figure 2 in paper
 ggplot(different_coupon_times, aes(x = t, y = prob, color = factor(c))) +
   geom_line(size = 1) +
   labs(
@@ -39,13 +40,13 @@ ggplot(different_coupon_times, aes(x = t, y = prob, color = factor(c))) +
   ) +
   theme_minimal()
 
-#ggsave(file.path(fig_filepath, "c_shifts_time.jpeg"), dpi = 300)
+ggsave(file.path(fig_filepath, "c_shifts_time.jpeg"), dpi = 300)
 
 
 
 # didn't use the next few figures in the paper
 # Histogram comparison
-ggplot(df_comparison, aes(x = interarrival_time, fill = process)) +
+ggplot(df_comparison_1, aes(x = interarrival_time, fill = process)) +
   geom_histogram(alpha = 0.5, bins = 50, position = "identity") +
   #scale_x_log10() +  # Log scale for better visualization
   labs(title = "Comparison of Interarrival Times: Superposed vs. Poisson",
@@ -55,7 +56,7 @@ ggplot(df_comparison, aes(x = interarrival_time, fill = process)) +
 
 
 # Density plot comparison
-ggplot(df_comparison, aes(x = interarrival_time, fill = process)) +
+ggplot(df_comparison_1, aes(x = interarrival_time, fill = process)) +
   geom_density(alpha = 0.5, color = NA) +
   # scale_x_log10() +  # Log scale for better visualization
   labs(title = "Comparison of Interarrival Times: Superposed vs. Poisson",
@@ -63,15 +64,7 @@ ggplot(df_comparison, aes(x = interarrival_time, fill = process)) +
   theme_minimal()
 
 
-ggplot(data = rbind(data.frame(x=poisson_events,y="pois"),
-                    data.frame(x=pooled_events,y="sim")), 
-       aes(x=x, fill=y)) + geom_density(alpha=0.5)
-# length is the number of events
 
-
-
-
-# did use these figures
 
 # Plot histogram
 ggplot(sim_long, aes(x = Counts, fill = Process)) +

@@ -2,7 +2,7 @@ set.seed(24)
 library(dplyr)
 library(ggplot2)
 library(tidyverse)
-fig_filepath <- "~/Documents/Duke-Classes/IndependentStudy/RFigures"
+fig_filepath <- "~/Documents/Duke-Classes/IndependentStudy/github-repo/RFigures"
 
 
 # Simulation parameters
@@ -210,6 +210,17 @@ pooled_events <- superpose_renewal_processes_fixed_time(num_sources, time_horizo
 pooled_interarrivals <- diff(pooled_events)
 
 
+
+# look at the pooled interrarival times
+ggplot(data = data.frame(inter=pooled_interarrivals), aes(x=inter)) + 
+  geom_histogram(bins = 100) + 
+  theme_minimal()+
+  labs(x="Interrarival Time",
+       y = "Frequency", 
+       title = "Time between arrivals in Simulation")
+ggsave(file.path(fig_filepath, "interarrival_frequency_simulation.jpeg"), dpi = 300)
+
+
 # Estimate event rate (lambda) from pooled renewal process
 lambda_pooled <- expected_lambda*num_sources
 # Generate Poisson process with the same event rate
@@ -218,7 +229,7 @@ poisson_interarrivals <- diff(poisson_events)  # Compute interarrival times
 
 
 # Combine data for comparison
-df_comparison <- data.frame(
+df_comparison_1 <- data.frame(
   interarrival_time = c(pooled_interarrivals, poisson_interarrivals),
   process = rep(c("Superposed Renewal", "Poisson"), 
                 c(length(pooled_interarrivals), length(poisson_interarrivals)))
@@ -274,3 +285,4 @@ df_comparison <- data.frame(
   process = rep(c("Empirical", "Poisson"), c(length(revenue_rates), length(revenue_rates_poisson)))
 )
 
+source("CodeForFigures.R")

@@ -100,8 +100,8 @@ simulate_renewal_process_fixed_time <- function(time_horizon) {
 }
 
 # Superposition function for multiple sources
-superpose_renewal_processes_fixed_time <- function(rces, time_horizon) {
-  all_events <- unlist(lapply(1:rces, function(x) {
+superpose_renewal_processes_fixed_time <- function(num_sources, time_horizon) {
+  all_events <- unlist(lapply(1:num_sources, time_horizon, function(x) {
     simulate_renewal_process_fixed_time(time_horizon)
   }))
   return(sort(all_events))  # Sort to get the pooled event sequence
@@ -140,7 +140,7 @@ simulate_total_revenue <- function() {
   total_visits <- 0
   
   # For each customer, simulate their visits and calculate the revenue
-  for (cust in 1:rces) {
+  for (cust in 1:num_sources) {
     customer_visits <- simulate_customer_visits(time_horizon)
     
     # Calculate revenue: 15 if before day 60, 20 after day 60

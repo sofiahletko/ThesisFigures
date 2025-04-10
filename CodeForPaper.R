@@ -8,7 +8,9 @@ fig_filepath <- "~/Documents/Duke-Classes/IndependentStudy/github-repo/RFigures"
 # Simulation parameters
 num_customers <- 1000
 n_sim <- 1000
-time_horizon <- 365
+#time_horizon <- 365
+time_horizon <- 365*10
+
 # parameters for the beta distribution
 alpha <- 3
 beta <- 5 # beta = c(beta)
@@ -101,7 +103,8 @@ simulate_renewal_process_fixed_time <- function(time_horizon) {
 
 # Superposition function for multiple sources
 superpose_renewal_processes_fixed_time <- function(num_sources, time_horizon) {
-  all_events <- unlist(lapply(1:num_sources, time_horizon, function(x) {
+  #all_events <- unlist(lapply(1:num_sources, time_horizon, function(x) {
+  all_events <- unlist(lapply(1:num_sources, function(x) {
     simulate_renewal_process_fixed_time(time_horizon)
   }))
   return(sort(all_events))  # Sort to get the pooled event sequence
@@ -218,7 +221,7 @@ ggplot(data = data.frame(inter=pooled_interarrivals), aes(x=inter)) +
   labs(x="Interrarival Time",
        y = "Frequency", 
        title = "Time between arrivals in Simulation")
-ggsave(file.path(fig_filepath, "interarrival_frequency_simulation.jpeg"), dpi = 300)
+#ggsave(file.path(fig_filepath, "interarrival_frequency_simulation.jpeg"), dpi = 300)
 
 
 # Estimate event rate (lambda) from pooled renewal process
@@ -228,6 +231,10 @@ poisson_events <- simulate_poisson_process(lambda_pooled, time_horizon)
 poisson_interarrivals <- diff(poisson_events)  # Compute interarrival times
 
 
+saveRDS(pooled_events, file = "sim_n_pooled.rds")
+saveRDS(poisson_events, file = "sim_n_pois.rds")
+pooled_events <-readRDS(file = "sim_n_pooled.rds")
+poisson_events <- readRDS(file = "sim_n_pois.rds")
 # Combine data for comparison
 df_comparison_1 <- data.frame(
   interarrival_time = c(pooled_interarrivals, poisson_interarrivals),

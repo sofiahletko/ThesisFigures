@@ -69,5 +69,6 @@ stan_data <- list(
 )
 compiled_model_beta_param <- stan_model("EstimatingBetaParam.stan")
 fit_beta_param <- sampling(compiled_model_beta_param, data = stan_data, 
-                           chains = 4, iter = 1000)
-
+                           chains = 4, iter = 4000)
+print(rstan::summary(fit_beta_param, pars = c("alpha","beta"))$summary)
+print(rstan::summary(fit_beta_param, pars = c("alpha","beta"))$summary[,c("mean","2.5%","97.5%")])
